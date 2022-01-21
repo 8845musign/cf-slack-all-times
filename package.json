@@ -1,0 +1,24 @@
+{
+  "name": "cf-slack-all-times",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "npx @google-cloud/functions-framework --target=slack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/8845musign/cf-slack-all-times.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/8845musign/cf-slack-all-times/issues"
+  },
+  "homepage": "https://github.com/8845musign/cf-slack-all-times#readme",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^2.1.0",
+    "@slack/bolt": "^3.9.0",
+    "request": "^2.88.2"
+  }
+}
