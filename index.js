@@ -1,15 +1,26 @@
-const request = require('request');
+require('dotenv').config();
+const { App } = require('@slack/bolt');
 
-exports.slack = (req, res) => {
+const app = new App({
+    token: process.env.SLACK_BOT_USER_OAUTH_TOKEN,
+    signingSecret: process.env.SLACK_SIGNING_SECRET,
+})
 
-    request.post({
-        uri: "",
-        headers: { 'Content-type': 'application/json' },
-        json: { 'text': 'こんにちは' }
-    }, function (err, res, body) {
-        res.send(200);
-        console.log(err, res, body);
-    });
+exports.main = (req, res) => {
+    if (req.body.type === "url_verification") {;
+        res.status(200).json({
+            challenge: req.body.challenge
+        });
+        return;
+    }
 
-    res.status(200).send('Success');
+    app.client.chat.postMessage({
+        channel: process.env.CHANNEL_FOR_COLLECTION,
+        text: 'hello',
+    }).then(() => {
+        // res.status(200).send('Success');
+    }).catch(err => {
+        // console.error(err);
+        // res.status(400).send('Fail');
+    })
 };

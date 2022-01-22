@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "npx @google-cloud/functions-framework --target=slack"
+    "build:serve": "npx @google-cloud/functions-framework --target=main",
+    "deploy": "gcloud functions deploy slack --entry-point main --runtime nodejs16 --trigger-http --env-vars-file .env.yaml --allow-unauthenticated"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,6 @@
   "dependencies": {
     "@google-cloud/functions-framework": "^2.1.0",
     "@slack/bolt": "^3.9.0",
-    "request": "^2.88.2"
+    "dotenv": "^14.2.0"
   }
 }
