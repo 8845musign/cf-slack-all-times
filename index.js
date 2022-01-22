@@ -1,6 +1,16 @@
 require('dotenv').config();
 const { App } = require('@slack/bolt');
 
+if (!process.env.SLACK_BOT_USER_OAUTH_TOKEN) {
+    console.error("No SLACK_BOT_USER_OAUTH_TOKEN");
+    return;
+}
+
+if (!process.env.SLACK_BOT_USER_OAUTH_TOKEN) {
+    console.error("No SLACK_SIGNING_SECRET");
+    return;
+}
+
 const app = new App({
     token: process.env.SLACK_BOT_USER_OAUTH_TOKEN,
     signingSecret: process.env.SLACK_SIGNING_SECRET,
