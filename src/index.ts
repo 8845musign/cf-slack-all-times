@@ -29,13 +29,11 @@ const app = new App({
   processBeforeResponse: true,
 })
 
-app.message(async ({ body, client, event }) => {
+app.message(async ({ client, event }) => {
 
   if (event.subtype === 'message_changed' || event.subtype === 'message_deleted' || event.channel === CHANNEL_FOR_COLLECTION) {
     return
   }
-
-  console.log('token:', body.token)
 
   console.log('get permalink')
 
