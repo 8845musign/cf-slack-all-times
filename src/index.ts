@@ -1,5 +1,4 @@
 import dotenv = require('dotenv')
-import { Request, Response } from 'express'
 import { App, ExpressReceiver } from '@slack/bolt'
 
 dotenv.config()
@@ -30,11 +29,13 @@ const app = new App({
   processBeforeResponse: true,
 })
 
-app.message(async ({ client, event }) => {
+app.message(async ({ body, client, event }) => {
 
   if (event.subtype === 'message_changed' || event.subtype === 'message_deleted' || event.channel === CHANNEL_FOR_COLLECTION) {
     return
   }
+
+  console.log('token:', body.token)
 
   console.log('get permalink')
 
@@ -56,14 +57,4 @@ app.message(async ({ client, event }) => {
   })
 })
 
-exports.main = (req: Request, res: Response) => {
-  if (req.body.type === 'url_verification') {
-        
-    res.status(200).json({
-      challenge: req.body.challenge
-    })
-    return
-  }
-
-  receiver.app(req, res)
-}
+exports.main = receiver.app
