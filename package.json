@@ -8,7 +8,7 @@
     "copy": "copyfiles package.json functions && copyfiles .env.yaml functions",
     "build": "run-s clean copy build:tsc",
     "build:tsc": "tsc",
-    "deploy": "npm run deploy:gcloud --prefix functions",
+    "deploy": "npm run build && npm run deploy:gcloud --prefix functions",
     "deploy:gcloud": "gcloud functions deploy slack --entry-point main --runtime nodejs16 --trigger-http --env-vars-file .env.yaml --allow-unauthenticated",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts"

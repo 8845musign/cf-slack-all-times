@@ -1,24 +1,59 @@
 import dotenv = require('dotenv')
 import { Request, Response } from 'express'
-import { App } from '@slack/bolt'
+import { App, ExpressReceiver } from '@slack/bolt'
 
 dotenv.config()
 
-if (!process.env.SLACK_BOT_USER_OAUTH_TOKEN) {
+const { SLACK_BOT_USER_OAUTH_TOKEN, SLACK_SIGNING_SECRET, CHANNEL_FOR_COLLECTION } = process.env
+
+if (!SLACK_BOT_USER_OAUTH_TOKEN) {
   throw new Error('No SLACK_BOT_USER_OAUTH_TOKEN')
 }
 
-if (!process.env.SLACK_BOT_USER_OAUTH_TOKEN) {
+if (!SLACK_SIGNING_SECRET) {
   throw new Error('No SLACK_SIGNING_SECRET')
 }
 
-if (process.env.CHANNEL_FOR_COLLECTION == null) {
+if (CHANNEL_FOR_COLLECTION == null) {
   throw new Error('No CHANNEL_FOR_COLLECTION')
 }
 
+const receiver = new ExpressReceiver({
+  signingSecret: SLACK_SIGNING_SECRET,
+  endpoints: '/',
+  processBeforeResponse: true,
+})
+
 const app = new App({
-  token: process.env.SLACK_BOT_USER_OAUTH_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  token: SLACK_BOT_USER_OAUTH_TOKEN,
+  receiver,
+  processBeforeResponse: true,
+})
+
+app.message(async ({ client, event }) => {
+
+  if (event.subtype === 'message_changed' || event.subtype === 'message_deleted' || event.channel === CHANNEL_FOR_COLLECTION) {
+    return
+  }
+
+  console.log('get permalink')
+
+  const permalinkRes = await client.chat.getPermalink({
+    channel: event.channel,
+    message_ts: event.event_ts
+  })
+
+  if (!permalinkRes.ok || permalinkRes.permalink == null) {
+    console.error('No permalink')
+    return
+  }
+
+  console.log('post permalink')
+
+  app.client.chat.postMessage({
+    channel: CHANNEL_FOR_COLLECTION,
+    text: permalinkRes.permalink,
+  })
 })
 
 exports.main = (req: Request, res: Response) => {
@@ -30,10 +65,5 @@ exports.main = (req: Request, res: Response) => {
     return
   }
 
-  if (!process.env.CHANNEL_FOR_COLLECTION) return
-
-  app.client.chat.postMessage({
-    channel: process.env.CHANNEL_FOR_COLLECTION,
-    text: 'hello',
-  })
+  receiver.app(req, res)
 }
