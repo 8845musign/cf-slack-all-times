@@ -1,7 +1,4 @@
-import dotenv = require('dotenv')
 import { App, ExpressReceiver } from '@slack/bolt'
-
-dotenv.config()
 
 const { SLACK_BOT_USER_OAUTH_TOKEN, SLACK_SIGNING_SECRET, CHANNEL_FOR_COLLECTION } = process.env
 
