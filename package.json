@@ -6,8 +6,8 @@
   "scripts": {
     "clean": "rimraf \"functions/{*,.env.yaml}\"",
     "copy": "copyfiles package.json functions && copyfiles .env.yaml functions",
-    "build:env": "json2yaml .env.json > ./functions/.env.yaml",
     "build": "run-s clean copy build:env build:tsc",
+    "build:env": "json2yaml .env.json > ./functions/.env.yaml",
     "build:tsc": "tsc",
     "serve": "env-cmd -r ./env.json functions-framework --source=functions --target=main",
     "deploy": "npm run build && npm run deploy:gcloud --prefix functions",
