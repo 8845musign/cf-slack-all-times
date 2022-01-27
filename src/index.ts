@@ -26,12 +26,20 @@ const app = new App({
   processBeforeResponse: true,
 })
 
-app.message(async ({ client, event }) => {
-
+app.message(async ({ payload, client, event }) => {
   if (event.subtype === 'message_changed' || event.subtype === 'message_deleted' || event.channel === CHANNEL_FOR_COLLECTION) {
     return
   }
 
+  console.log('get user info')
+
+  // eslint-disable-next-line
+  // @ts-ignore
+  const user = payload.user as string 
+
+  const userInfo = await client.users.info({
+    user
+  })
   console.log('get permalink')
 
   const permalinkRes = await client.chat.getPermalink({
@@ -47,6 +55,8 @@ app.message(async ({ client, event }) => {
   console.log('post permalink')
 
   app.client.chat.postMessage({
+    username: userInfo.user?.profile?.display_name,
+    icon_url: userInfo.user?.profile?.image_48,
     channel: CHANNEL_FOR_COLLECTION,
     text: permalinkRes.permalink,
   })
