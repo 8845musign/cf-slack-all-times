@@ -55,7 +55,7 @@ app.message(async ({ payload, client, event }) => {
   console.log('post permalink')
 
   app.client.chat.postMessage({
-    username: userInfo.user?.profile?.display_name,
+    username: userInfo.user?.profile?.real_name,
     icon_url: userInfo.user?.profile?.image_48,
     channel: CHANNEL_FOR_COLLECTION,
     text: permalinkRes.permalink,
