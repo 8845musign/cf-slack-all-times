@@ -26,7 +26,7 @@ const app = new App({
   processBeforeResponse: true,
 })
 
-app.message(async ({ payload, client, event }) => {
+app.message(async ({ payload, client, event, message }) => {
   if (event.subtype === 'message_changed' || event.subtype === 'message_deleted' || event.channel === CHANNEL_FOR_COLLECTION) {
     return
   }
@@ -36,10 +36,15 @@ app.message(async ({ payload, client, event }) => {
   // eslint-disable-next-line
   // @ts-ignore
   const user = payload.user as string 
+  
+  // eslint-disable-next-line
+  // @ts-ignore
+  const text = message.text as string
 
   const userInfo = await client.users.info({
     user
   })
+
   console.log('get permalink')
 
   const permalinkRes = await client.chat.getPermalink({
@@ -47,9 +52,8 @@ app.message(async ({ payload, client, event }) => {
     message_ts: event.event_ts
   })
 
-  if (!permalinkRes.ok || permalinkRes.permalink == null) {
-    console.error('No permalink')
-    return
+  if (permalinkRes.error || permalinkRes.permalink == null) {
+    throw new Error('No permalink')
   }
 
   console.log('post permalink')
@@ -58,7 +62,9 @@ app.message(async ({ payload, client, event }) => {
     username: userInfo.user?.profile?.real_name,
     icon_url: userInfo.user?.profile?.image_48,
     channel: CHANNEL_FOR_COLLECTION,
-    text: permalinkRes.permalink,
+    text: `${text}\n<${permalinkRes.permalink}|Original message>`,
+    mrkdwn: true,
+    unfurl_links: false
   })
 })
 
