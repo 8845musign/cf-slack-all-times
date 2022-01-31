@@ -1,4 +1,4 @@
-# cloud-functions-slack-all-times
+# Cloud Functions slack all times
 
 A Slack message aggregation bot that runs on Cloud Functions.
 ## Setup
