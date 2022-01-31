@@ -18,6 +18,7 @@ A Slack message aggregation bot that runs on Cloud Functions.
 13. copy url
 14. go Event Subscriptions
 15. enter the URL you copied in Request URL
+16. invite bot to your channel(receive and send)
 
 ### `.env.yaml`
 
