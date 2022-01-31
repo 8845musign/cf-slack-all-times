@@ -1,4 +1,4 @@
-# cf-slack-all-times
+# cloud-functions-slack-all-times
 
 ## Setup
 

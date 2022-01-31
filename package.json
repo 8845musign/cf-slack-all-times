@@ -1,5 +1,5 @@
 {
-  "name": "cf-slack-all-times",
+  "name": "cloud-functions-slack-all-times",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -20,7 +20,7 @@
     "url": "git+https://github.com/8845musign/cf-slack-all-times.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/8845musign/cf-slack-all-times/issues"
   },
